@@ -125,7 +125,11 @@ export async function parse(handle: Reader): Promise<ID3Tag | null> {
       const v2Tag = new DataView(v2TagBuf);
       let position = 0;
 
-      while (position < v2TagBuf.byteLength) {
+      const frameHeaderSize =  version[0] < 3 ? 6 : 10;
+      /*
+       * Skip incomplete frames at the end
+       */
+      while (position + frameHeaderSize < v2TagBuf.byteLength) {
         let slice;
         let isFrame = true;
 
