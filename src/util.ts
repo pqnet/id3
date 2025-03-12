@@ -105,17 +105,8 @@ export function getStringUtf16(
   }
 
   if (useBuffer) {
-    const buf = Buffer.alloc(str.length * 2);
-    for (let i = 0; i < str.length; i++) {
-      const chr = str[i];
-
-      if (littleEndian) {
-        buf.writeUInt16LE(chr, i * 2);
-      } else {
-        buf.writeUInt16BE(chr, i * 2);
-      }
-    }
-    return buf.toString();
+    const buf = Buffer.from(new Uint16Array(str).buffer);
+    return buf.toString('utf16le');
   }
 
   return String.fromCharCode.apply(
